@@ -93,6 +93,7 @@ void str_ser(int sockfd) {
         }
 
         if (ack.response == 0) {
+            printf("Received packet #%d!\n", packet_counter);
             if (recvs[n-1] == '\0') {
                 end = 1;
                 n--;
@@ -111,13 +112,13 @@ void str_ser(int sockfd) {
 	}
 	fwrite (buf , 1 , lseek , fp);					//write data into file
 	fclose(fp);
-	printf("a file has been successfully received!\nthe total data received is %d bytes\n", (int)lseek);
+	printf("File successfully received!\nTotal size of data received is %d bytes\n", (int)lseek);
 }
 
 int ack_num(int error_rate) {
     int i = arc4random_uniform(100);
 
-    if (i <= error_rate) {
+    if (i < error_rate) {
         return 1;  // Packet is errorneous -- return 1
     }
     return 0;   // Packet is not errorneous -- return 0

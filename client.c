@@ -37,7 +37,7 @@ int main() {
     ti = str_cli(fp, network_socket, &len);
     rt = (len / (float)ti);
 
-    printf("Time Elapsed: %.3f ms\tData Sent: %d bytes\tData Rate: %f KB/s\n", ti, (int)len, rt);
+    printf("File successfully transferred!\nTime Elapsed: %.3f ms\tData Sent: %d bytes\tData Rate: %f KB/s\n", ti, (int)len, rt);
 
     close(network_socket);
     fclose(fp);
@@ -59,6 +59,7 @@ float str_cli(FILE *fp, int network_socket, long *len) {
     long current_byte = 0;
     char packet[DATALEN];
     struct ack_so ack;
+    struct pack_so pkt;
     int send_status, ack_status, packet_length;
     int packet_count = 1;
     float time_inv = 0.0;
