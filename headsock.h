@@ -1,4 +1,3 @@
-// headfile for TCP program
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -13,21 +12,13 @@
 #include <fcntl.h>
 #include <sys/time.h>
 
-#define NEWFILE (O_WRONLY|O_CREAT|O_TRUNC)
 #define TCP_PORT 4950
 #define BACKLOG 5
-#define DATALEN 500
-#define ERROR_RATE 0
+#define DATALEN 125
+#define ERROR_RATE 75
 #define BUFSIZE 60000
-#define PACKLEN 508
-#define HEADLEN 8
-
-//data packet structure
-struct pack_so {
-    uint32_t num;	// the sequence number
-    uint32_t len;	// the packet length
-    char data[DATALEN];	//the packet data
-};
+#define FALSE 0
+#define TRUE 1
 
 struct ack_so {
     uint8_t response;

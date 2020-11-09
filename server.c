@@ -64,22 +64,22 @@ int main() {
 }
 
 void str_ser(int sockfd) {
-	char buf[BUFSIZE];
+	char buffer[BUFSIZE];
+    long current_byte=0;
 	FILE *fp;
-	char recvs[DATALEN];
+	char packet[DATALEN];
 	struct ack_so ack;
-	int end, n = 0;
-	long lseek=0;
-	end = 0;
+    int transmission_ended = FALSE;
+	int byte_counter = 0;
     int packet_counter = 1;
 	
 	printf("Receiving data on port %d...\n", TCP_PORT);
 
-	while(!end) {
+	while(!transmission_ended) {
         printf("Receiving packet #%d...\n", packet_counter);
 
         int ack_status;
-		if ((n= recv(sockfd, &recvs, DATALEN, 0))==-1) {
+		if ((byte_counter= recv(sockfd, &packet, DATALEN, 0)) == -1) {
 			printf("Error receiving packet #%d!\n", packet_counter);
 			exit(1);
 		}
@@ -94,13 +94,13 @@ void str_ser(int sockfd) {
 
         if (ack.response == 0) {
             printf("Received packet #%d!\n", packet_counter);
-            if (recvs[n-1] == '\0') {
-                end = 1;
-                n--;
+            if (packet[byte_counter - 1] == '\0') {
+                transmission_ended = 1;
+                byte_counter--;
             }
 
-            memcpy((buf+lseek), recvs, n);
-            lseek += n;
+            memcpy((buffer + current_byte), packet, byte_counter);
+            current_byte += byte_counter;
             packet_counter++;
         } else {
             printf("Error found in packet #%d!\n", packet_counter);
@@ -110,13 +110,13 @@ void str_ser(int sockfd) {
 		printf("File doesn't exit\n");
 		exit(0);
 	}
-	fwrite (buf , 1 , lseek , fp);					//write data into file
+	fwrite (buffer, 1, current_byte, fp);					//write data into file
 	fclose(fp);
-	printf("File successfully received!\nTotal size of data received is %d bytes\n", (int)lseek);
+	printf("File successfully received!\nTotal size of data received is %d bytes\n", (int)current_byte);
 }
 
 int ack_num(int error_rate) {
-    int i = arc4random_uniform(100);
+    int i = arc4random_uniform(99);
 
     if (i < error_rate) {
         return 1;  // Packet is errorneous -- return 1
