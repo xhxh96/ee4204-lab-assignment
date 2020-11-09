@@ -51,16 +51,6 @@ int main() {
 
     close(server_socket);
     exit(0);
-
-    // char server_message[256] = "You have reached the server!";
-    // // send message to client
-    // int client_socket = accept(server_socket, NULL, NULL);
-    // send(client_socket, server_message, sizeof(server_message), 0);
-
-    // // close socket
-    // close(server_socket);
-
-    // return 0;
 }
 
 void str_ser(int sockfd) {
@@ -110,7 +100,7 @@ void str_ser(int sockfd) {
 		printf("File doesn't exit\n");
 		exit(0);
 	}
-	fwrite (buffer, 1, current_byte, fp);					//write data into file
+	fwrite (buffer, 1, current_byte, fp);
 	fclose(fp);
 	printf("File successfully received!\nTotal size of data received is %d bytes\n", (int)current_byte);
 }
